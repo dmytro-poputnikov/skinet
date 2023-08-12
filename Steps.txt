@@ -157,7 +157,10 @@ dotnet sln add Infrastructure
     - dotnet watch --no-hot-reload
 49. Edit controller to get types and brands. To do that we edit the IProductRepository, after ProductRepository and after ProductsController.
 50. Eager loading of navigation properties. (It means that properties will be loaded if we implicitly indicate that we want them.)
- - 
+ - In ProductRepository add:
+        .Include(p => p.ProductType)
+        .Include(p => p.ProductBrand)
+        
 
 
 
