@@ -1,0 +1,167 @@
+1. Install https://dotnet.microsoft.com/en-us/download
+2. VS CODE:
+Extensions: 
+- C#
+- C# Extensions
+- Material Icon
+- NuGet
+- NuGet Gallery
+- SQLite
+3. Check .Net:  dotnet --info
+4. mkdir skinet
+5. cd skinet
+6. dotnet -h
+7. dotnet new list
+8. dotnet new sln
+9. dotnet new webapi -n API
+10. dotnet sln add API
+11. dotnet sln list
+12. Open project in VS Code / Click Yes "Required assets to build ...". If you miss it: Show All Command / generate asset for build and debug
+13. Edit lanuchSettings.json in API
+14. cd API 
+15. dotnet run
+16. Check https://localhost:5001/weatherforecast in postman. Check settings/ SSL certificate verification (OFF)
+17. Check in browser https://localhost:5001/weatherforecast and if we have problems with SSL then:
+18. dotnet dev-certs https / dotnet dev-certs --clean / dotnet dev-certs https --trust
+19. appsettings.Development.json => Microsoft.AspNetCore => Information
+20. API.csproj => Nullable disable
+21. VS Code / Settings/ Exclude // **/obj and **/bin
+22. dotnet watch (HOT RELOAD)
+23. dotnet watch --not-hot-reload
+24. In VS Code open/ NuGet Gallery and install Microsoft.EntityFrameworkCore.Sqlite (Mach to version .Net runtime)
+25. Install Microsoft.EntityFrameworkCore.Design (Migration on code first)
+26. Create folder Data and add new class: StoreContext : DbContext and generate constructior StoreContext(options). DbContext is a combination of the Unit Of Work and Repository patterns.
+27. To StoreContext add prop =>  public DbSet<Class> NameOfTable {get;set}
+28. Add connection string to appsettings.Development.json. Add 
+"ConnectionStrings":{
+    "DefaultConnection": "Data source=skinet.db"
+}
+29. To Program.cs add: 
+    builder.Services.AddDbContext<StoreContext>(opt => 
+    {
+        opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
+    });
+30. Adding an Entity Framework migration. To do that open https://nuget.org/packages/dotnet-ef:
+    copy and execute: 
+    dotnet tool install --global dotnet-ef --version 7.0.10
+        or
+    dotnet tool update --global dotnet-ef --version 7.0.10
+
+    Check: dotnet tool list -g
+31. dotnet ef (all options) / dotnet ef migration (get migration options). Execute:
+    dotnet ef migrations add InitialCreate -o Data/Migrations
+32. Execute migration:
+    dotnet ef database update
+33. In ProductController.cs add constructor: snippet ctor and add to parameters context: public ProductsController(StoreContext context) - it's dependency injection. 
+    Because we have this service in Program.cs then we can inject this service.
+34. In C# Extensions / Settings/ Uncheck Csharpexteions: Use This For Ctor Assignments to achive 
+    _variable = variable
+35. Edit GetProducts():
+        Sync:
+        [HttpGet]
+            public ActionResult<List<Product>> GetProducts()
+            {
+                var products = _context.Products.ToList();
+                return products;
+            }
+        Async: 
+        [HttpGet]
+        public async Task<ActionResult<List<Product>>> GetProducts()
+        {
+            var products = await _context.Products.ToListAsync();
+            return products;
+        }
+36. Add addinitonal projects:
+Api =>  (http requests)
+Infrastructure => (resp. for infr. related things (connect to DB and etc..))
+Core (Entities)
+
+##dotnet new list and find classlib
+
+dotnet new classlib -n Core 
+dotnet new classlib -n Infrastructure 
+dotnet sln add Core 
+dotnet sln add Infrastructure 
+
+37.Add dependencies:
+- cd API
+- dotnet add reference ../Infrastructure
+- cd ..
+- cd Infrastructure
+- dotnet add reference ../Core
+- dotnet restore
+38. Move an Entities folder to Core folder and Data to Infrastructure folder. In csproj <Nullable>disable</Nullable>.
+39. Move from API.csproj to Infrastructure.csproj:
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.10" />
+  </ItemGroup>
+    and fix all references.
+    After: 
+    dotnet restore
+    dotnet build
+40. In skinet execute: 
+    - git status
+    - git init 
+    - git branch -m main
+    - Create repository in github
+    - git remote add origin https://github.com/dmytro-poputnikov/skinet.git
+    - git push -u origin main
+(We can use an additional tool: oh my zsh)
+41. Add repository pattern: 
+    - Add folder Interfaces to Core. To this folder add a class with name IProductRepository.cs and implementetion.
+    - Add new class to Infrastructure/Data with name ProductRepository.cs and implement interface IProductRepository
+    - Add ProductRepository as service. And for do that we have to add it to Program.cs: 
+        ## (AddScoped() ) - scope only of http request
+        ## Another options AddTransient
+        ## Another options AddSingleton
+        builder.Services.AddScoped<IProductRepository, ProductRepository>();
+    - In ProductRepository add StoreContext context and add implementations of methods. 
+    - Make a refactoring of the ProductController and use (IProductRepository repo)
+42. Add BaseEntity to Entities and add property   public int Id { get; set; }. After that delete Id from another Entity and an inheritance from BaseEntity. 
+43. Add another properties to Product entity and new Entities ProductType and ProductBrand with relations.  Add them to StoreContext as DbSet.
+44. Drop database and migrations : dotnet ef database drop -p Infrastructure -s API  | dotnet ef migrations remove -p Infrastructure -s API
+45. Add new migration: dotnet ef migrations add InitialCreate  -p Infrastructure -s API -o Data/Migrations
+46. Add Configuration of migrations: 
+    - In Data add Config folder
+    - Add file ProductConfiguration.cs
+    - In StoreContext add:
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+            {
+                base.OnModelCreating(modelBuilder);
+                modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+            }
+    - dotnet ef migrations remove -p Infrastructure -s API
+    - dotnet ef migrations add InitialCreate  -p Infrastructure -s API -o Data/Migrations
+47. Add a new code to apply migrations at the start of the project:
+    - In Program.cs before app.Run() add:
+        using var scope = app.Services.CreateScope();
+        var services = scope.ServiceProvider;
+        var context = services.GetRequiredService<StoreContext>();
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        try
+        {
+            await context.Database.MigrateAsync();
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "An error occured during migration");
+        }
+48. Seeding data. 
+    - Get in StudentAssets jsons and add to Infrastructure/Data new class: StoreContextSeed.cs. 
+    - In Program.cs edit this lines:
+        try
+        {
+            await context.Database.MigrateAsync();
+            await StoreContextSeed.SeedAsync(context);
+        }
+    - dotnet watch --no-hot-reload
+49. Edit controller to get types and brands. To do that we edit the IProductRepository, after ProductRepository and after ProductsController.
+50. Eager loading of navigation properties. (It means that properties will be loaded if we implicitly indicate that we want them.)
+ - 
+
+
+
+
+
+
+
