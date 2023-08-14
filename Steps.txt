@@ -225,6 +225,12 @@ Extensions:
 55. Serving static content from the API:
     - Add new folder inside the API folder with a name wwwroot
     - In a Program class add (app.UseStaticFiles();)
+56. Add BaseApiController.cs and in ProductController.cs derive from BaseApiController.
+57. Add BuggyController:
+    - Creating a consistent error response from the API. For that add new folder Errors and add ApiResponse.cs
+    - Use it in BuggyController.
+58. Add not found api handler: 
+    - Add new controller ErrorController.
 
 
 
