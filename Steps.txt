@@ -72,16 +72,16 @@ Extensions:
             return products;
         }
 36. Add addinitonal projects:
-Api =>  (http requests)
-Infrastructure => (resp. for infr. related things (connect to DB and etc..))
-Core (Entities)
+    Api =>  (http requests)
+    Infrastructure => (resp. for infr. related things (connect to DB and etc..))
+    Core (Entities)
 
-##dotnet new list and find classlib
+    ##dotnet new list and find classlib
 
-dotnet new classlib -n Core 
-dotnet new classlib -n Infrastructure 
-dotnet sln add Core 
-dotnet sln add Infrastructure 
+    dotnet new classlib -n Core 
+    dotnet new classlib -n Infrastructure 
+    dotnet sln add Core 
+    dotnet sln add Infrastructure 
 
 37.Add dependencies:
 - cd API
@@ -160,7 +160,76 @@ dotnet sln add Infrastructure
  - In ProductRepository add:
         .Include(p => p.ProductType)
         .Include(p => p.ProductBrand)
-        
+51. Create Generic Repository and interface:
+       - Create IGenericRepository
+       - Create GenericRepository
+       - Add to program new service: builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+       - Add to ProductController IGenericRepository<Product> productRepo, IGenericRepository<ProductBrand> productBrandRepo, GenericRepository<ProductType> producTypeRepo
+       - Change implementation of ProductController
+52. Add Specification Pattern:
+    - Describes a query in an object
+    - Returns an IQueryable<T>
+    - Generic List method takes specification as parameters
+- Speciication can have meaningful name
+
+    To do:
+    - Add Core/Specifications/ISpecification.cs and implement it
+    - Add Infrastructure/SpecificationEvaluator.cs
+    - To IGenericRepository add:
+            Task<T> GetEntityWithSpec(ISpecification<T> spec);
+            Task<IReadOnlyList<T>> ListAsync(ISpecification<T> spec);
+    - To GenericRepository add:
+           public async Task<IReadOnlyList<T>> ListAsync(ISpecification<T> spec)
+            {
+                return await ApplySpecification(spec).ToListAsync();
+            }
+
+            private IQueryable<T> ApplySpecification(ISpecification<T> spec)
+            {
+                return SpecificationEvaluator<T>.GetQuery(_context.Set<T>().AsQueryable(), spec);
+            }
+    - Inside Core/Specifications add file ProductsWithTypesAndBrandsSpecification 
+    - Edit ProductsController like this:
+            [HttpGet]
+            public async Task<ActionResult<List<Product>>> GetProducts()
+            {
+                var spec = new ProductsWithTypesAndBrandsSpecification();
+                var products = await _productRepo.ListAsync(spec);
+                return Ok(products);
+            }
+53. Use debugger:
+    - Add breakpoint to some point
+    - Debug and Run (VS Code)
+    - .Net Attach
+    - Start debug and search for API
+54. Shaping the data to return with DTOs
+    - Add folder API/Dtos and add a new class "ProductToReturnDto.cs" with selected properties
+    - In ProductController change GetProduct to return new type and return new ProductToReturnDto
+    - To avoid mapping properties manualy we will use automapper. Install it from NuGet/ AutoMapper... DepInjection.
+    - Add new folder API/Helpers
+    - Add new file MappingProfiles.cs with a constructor:  CreateMap<Product, ProductToReturnDto>();
+    - Add this class as a service to Program.cs
+    - In ProductController inject new service and use it "return _mapper.Map<Product, ProductToReturnDto>(product);"
+    - To get related data from another tables we have to add AutoMapperProfiles. In MappingProfiles.cs:
+            public MappingProfiles()
+            {
+                CreateMap<Product, ProductToReturnDto>()
+                    .ForMember(d => d.ProductBrand, o => o.MapFrom(s => s.ProductBrand.Name))
+                    .ForMember(d => d.ProductType, o => o.MapFrom(s => s.ProductType.Name))
+                ;
+            }
+    - Modify a return value of an image URL. Add custom value resolver for auto mapper:
+        - Add for appsettings.Dev.json prop ApiUrl
+        - Add new file API/Helpers/ProductUrlResolver.cs
+        - Eddit mappingProfiles:  .ForMember(d => d.PictureUrl, o => o.MapFrom<ProductUrlResolver>());
+55. Serving static content from the API:
+    - Add new folder inside the API folder with a name wwwroot
+    - In a Program class add (app.UseStaticFiles();)
+
+
+
+
+
 
 
 
