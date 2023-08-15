@@ -27,6 +27,12 @@ namespace Infrastructure.Data
             return await _context.Set<T>().ToListAsync();
         }
 
+        public async Task<int> CountAsync(ISpecification<T> spec)
+        {
+            return await ApplySpecification(spec).CountAsync();
+        }
+
+
 
         public async Task<T> GetEntityWithSpec(ISpecification<T> spec)
         {
@@ -43,5 +49,7 @@ namespace Infrastructure.Data
         {
             return SpecificationEvaluator<T>.GetQuery(_context.Set<T>().AsQueryable(), spec);
         }
+
+
     }
 }
