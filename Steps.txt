@@ -231,6 +231,41 @@ Extensions:
     - Use it in BuggyController.
 58. Add not found api handler: 
     - Add new controller ErrorController.
+59. Add Api Paging, Filtering, Sorting, Searching
+60. Install NVM (Node Version Manager)
+60. Install angular: npm install -g @angular/cli / ng version. If u want to update:
+    npm uninstall -g @angular/cli
+    npm install -g @angular/cli@latest
+61. Add https for angular:
+    - cd client
+    - add new folder ssl 
+    - mkcert -install
+    - add client/ssl folder and open this folder in a terminal
+    - mkcert localhost
+    - inside an angular.json file change:
+        "serve": {
+            "builder": "@angular-devkit/build-angular:dev-server",
+            "options": {
+                "sslCert": "ssl/localhost.pem",
+                "sslKey": "ssl/localhost-key.pem",
+                "ssl": true
+            },
+        ...
+        }
+    - chrome://flags/#allow-insecure-localhost
+62. Add bootstrap and font-awesome:
+    - ng add ngx-bootstrap (https://valor-software.com/ngx-bootstrap/#/documentation)
+    - npm install font-awesome
+    - angular.json:
+        "styles": [
+                "node_modules/font-awesome/css/font-awesome.min.css",
+                "src/styles.scss"
+                ]
+63. Add new Extensions for Vs code for Angular:
+    - Angular Language Service
+    - 
+
+
 
 
 
