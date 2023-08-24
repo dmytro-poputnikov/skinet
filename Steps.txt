@@ -263,7 +263,14 @@ Extensions:
                 ]
 63. Add new Extensions for Vs code for Angular:
     - Angular Language Service
-    - 
+64. Organising or files and folders:
+    - ng g m core 
+    - ng g m shared
+    - ng g m shop
+    - ng g c shop/shop --flat --skip-tests (flat - dont create new folder)
+    - ng g s shop/shop 
+    - ng g m shop/shop-routing --flat
+    
 
 
 
