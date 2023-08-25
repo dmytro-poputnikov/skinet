@@ -7,6 +7,7 @@ using Core.Interfaces;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 namespace API.Extensions
 {
@@ -17,7 +18,9 @@ namespace API.Extensions
 
             // Add services to the container.
             services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen();
+            services.AddSwaggerGen(swagger =>
+                swagger.SwaggerDoc("v1", new OpenApiInfo { Title = "The API", Version = "v1" })
+            );
             services.AddDbContext<StoreContext>(opt =>
             {
                 opt.UseSqlite(config.GetConnectionString("DefaultConnection"));

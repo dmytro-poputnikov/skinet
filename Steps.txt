@@ -271,6 +271,24 @@ Extensions:
     - ng g s shop/shop 
     - ng g m shop/shop-routing --flat
     
+...
+
+
+
+
+For automation generate the API :
+1) ApplicationServicesExtensions: 
+    services.AddSwaggerGen(swagger =>
+                swagger.SwaggerDoc("v1", new OpenApiInfo { Title = "The API", Version = "v1" })
+            );
+2) Program.cs:
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "API v1");
+    });
+3) npm install @openapitools/openapi-generator-cli --save-dev
+4) package.json:  "generate-api": "openapi-generator-cli generate -i https://localhost:5001/swagger/v1/swagger.json -g typescript-angular -o src/app/api",
+
 
 
 

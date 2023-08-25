@@ -1,3 +1,5 @@
+import { ProductsService } from './api';
+import { BuggyService } from './api/api/buggy.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({

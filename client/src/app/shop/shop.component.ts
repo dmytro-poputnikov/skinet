@@ -34,25 +34,25 @@ export class ShopComponent implements OnInit {
   getProducts() {
     console.log(this.shopParams);
     this._shopService.getProducts(this.shopParams).subscribe({
-      next: (response) => {
+      next: response => {
         this.products = response.data;
         this.shopParams.pageIndex = response.pageIndex;
         this.shopParams.pageSize = response.pageSize;
         this.totalCount = response.count;
       },
-      error: (error) => console.log(error),
+      error: error => console.log(error),
     });
   }
   getBrands() {
     this._shopService.getBrands().subscribe({
-      next: (response) => (this.brands = [{ id: 0, name: 'All' }, ...response]),
-      error: (error) => console.log(error),
+      next: response => (this.brands = [{ id: 0, name: 'All' }, ...response]),
+      error: error => console.log(error),
     });
   }
   getTypes() {
     this._shopService.getTypes().subscribe({
-      next: (response) => (this.types = [{ id: 0, name: 'All' }, ...response]),
-      error: (error) => console.log(error),
+      next: response => (this.types = [{ id: 0, name: 'All' }, ...response]),
+      error: error => console.log(error),
     });
   }
   onBrandSelected(brandId: number) {

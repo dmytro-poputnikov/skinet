@@ -13,7 +13,7 @@ export class ProductDetailsComponent implements OnInit {
 
   constructor(
     private shopService: ShopService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {
@@ -24,8 +24,8 @@ export class ProductDetailsComponent implements OnInit {
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     if (id)
       this.shopService.getProduct(+id).subscribe({
-        next: (product) => (this.product = product),
-        error: (error) => console.log(error),
+        next: product => (this.product = product),
+        error: error => console.log(error),
       });
   }
 }
