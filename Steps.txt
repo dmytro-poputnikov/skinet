@@ -305,7 +305,9 @@ Extensions:
     - Copy docker-compose.yaml to the root folder
     - run: docker-compose up --detach    
 
-66. 
+66. Add basket to client:
+    - use json2ts.com
+    - npm install cuid (for basket id)
     
 
 
