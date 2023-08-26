@@ -291,6 +291,15 @@ For automation generate the API :
 
 
 
+---------
+Theme for bootstrap: https://bootswatch.com/
+
+1) npm install bootswatch
+1) Add style to angular.json styles 
+
+
+--- 
+ngx spinner
 
 
 
