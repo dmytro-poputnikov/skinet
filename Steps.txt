@@ -312,9 +312,15 @@ Extensions:
 
 
 
+67. Identity:
+    - Add Identity.EntityFrameworkCore to core
+    - Add AspNetCore.Identity to Infrastructure
+    - IdentityModel.Tokens
+    - System.IdentityModel.Tokens.Jwt
+    - Add new classes to entities
+    - Add new Extensions to API 
 
-
-
+    - dotnet ef migrations add IdentityInitial -p Infrastructure -s API -c AppIdentityDbContext -o Identity/Migrations
 
 
 -----------
