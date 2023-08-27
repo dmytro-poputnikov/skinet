@@ -18,11 +18,7 @@ namespace API.Extensions
         public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration config)
         {
 
-            // Add services to the container.
-            services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen(swagger =>
-                swagger.SwaggerDoc("v1", new OpenApiInfo { Title = "The API", Version = "v1" })
-            );
+
             services.AddDbContext<StoreContext>(opt =>
             {
                 opt.UseSqlite(config.GetConnectionString("DefaultConnection"));
