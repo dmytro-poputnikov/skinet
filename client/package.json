@@ -23,6 +23,7 @@
     "@angular/platform-browser-dynamic": "^16.2.0",
     "@angular/router": "^16.2.0",
     "@paralleldrive/cuid2": "^2.2.2",
+    "@stripe/stripe-js": "^2.1.0",
     "bootstrap": "^5.2.3",
     "bootswatch": "^5.3.1",
     "font-awesome": "^4.7.0",
