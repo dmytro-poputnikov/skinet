@@ -1,7 +1,9 @@
 <div class="mt-4" *ngIf="checkoutForm" [formGroup]="checkoutForm">
   <div class="row">
     <div class="form-group col-12" formGroupName="paymentForm">
-      <app-text-input [label]="'Name On Card'" formControlName="nameOnCard"></app-text-input>
+      <app-text-input
+        [label]="'Name On Card'"
+        formControlName="nameOnCard"></app-text-input>
     </div>
   </div>
   <div class="row mb-3">
@@ -26,14 +28,21 @@
     </div>
   </div>
 </div>
-<div class="float-none d-flex justify-content-between flex-column flex-lg-row mb-5">
+<div
+  class="float-none d-flex justify-content-between flex-column flex-lg-row mb-5">
   <button class="btn btn-outline-primary" cdkStepperPrevious>
     <i class="fa fa-angle-left"></i>
     Back to review
   </button>
-  <button [disabled]="loading || !paymentFromComplete" class="btn btn-primary" (click)="submitOrder()">
+  <button
+    [disabled]="loading || !paymentFromComplete"
+    class="btn btn-primary"
+    (click)="submitOrder()">
     Submit order
     <i class="fa fa-angle-right"></i>
-    <i *ngIf="loading" class="fa fa-spinner fa-spin"></i>
+    <i
+      *ngIf="loading"
+      class="fa fa-spinner fa-spin"
+      style="margin-left: 10px"></i>
   </button>
 </div>

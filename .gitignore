@@ -477,3 +477,5 @@ $RECYCLE.BIN/
 *.lnk
 API/appsettings.json
 *.db
+*.db-shm
+*.db-wal
