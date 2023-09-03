@@ -10,8 +10,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class LoginComponent {
   returnUrl: string = '';
-  constructor(private accountService: AccountService, private router: Router, private activatedRoute: ActivatedRoute) {
-    this.returnUrl = this.activatedRoute.snapshot.queryParams['returnUrl'] || '/shop';
+  constructor(
+    private accountService: AccountService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+  ) {
+    this.returnUrl =
+      this.activatedRoute.snapshot.queryParams['returnUrl'] || '/shop';
   }
 
   loginForm = new FormGroup({

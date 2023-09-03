@@ -1,23 +1,41 @@
-<header class="d-flex flex-md-row align-items-center justify-content-between p-3 px-md-4 mb-3 bg-white border-bottom box-shadow fixed-top shadow-sm">
-  <img class="logo" src="/assets/images/logo.png" alt="logo" style="max-height: 70px" routerLink="/" />
+<header
+  class="d-flex flex-md-row align-items-center justify-content-between p-3 px-md-4 mb-3 bg-white border-bottom box-shadow fixed-top shadow-sm">
+  <img
+    class="logo"
+    src="/assets/images/logo.png"
+    alt="logo"
+    style="max-height: 70px"
+    routerLink="/" />
   <nav class="my-2 text-uppercase fs-4 my-md-0 mr-md-3">
-    <a class="p-2" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+    <a
+      class="p-2"
+      routerLink="/"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }">
+      Home
+    </a>
     <a class="p-2" routerLink="/shop" routerLinkActive="active">Shop</a>
     <a class="p-2" routerLink="/test-error" routerLinkActive="active">Error</a>
   </nav>
   <div class="d-flex align-items-center">
     <a routerLink="/basket" class="position-relative">
       <i class="fa fa-shopping-cart fa-2x me-5 text-dark"></i>
-      <div *ngIf="basketService.basketSource$ | async as basket" class="cart-no">
+      <div
+        *ngIf="basketService.basketSource$ | async as basket"
+        class="cart-no">
         {{ getCount(basket.items) }}
       </div>
     </a>
-    <ng-container *ngIf="(accountSerice.currentUser$ | async) === null">
-      <a routerLink="/account/login" class="btn btn-outline-secondary me-2">Login</a>
-      <a routerLink="/account/register" class="btn btn-outline-secondary me-2">Sign up</a>
+    <ng-container *ngIf="(currentUser$ | async) === null">
+      <a routerLink="/account/login" class="btn btn-outline-secondary me-2">
+        Login
+      </a>
+      <a routerLink="/account/register" class="btn btn-outline-secondary me-2">
+        Sign up
+      </a>
     </ng-container>
 
-    <ng-container *ngIf="accountSerice.currentUser$ | async as user">
+    <ng-container *ngIf="currentUser$ | async as user">
       <div class="dropdown ms-3 me-5" style="cursor: pointer" dropdown>
         <a dropdownToggle class="dropdown-toogle">
           <strong>Welcome {{ user.displayName }}</strong>
@@ -37,7 +55,7 @@
           </li>
           <div class="dropdown-divider"></div>
           <li class="py-1">
-            <a (click)="accountSerice.logout()" class="dropdown-item">
+            <a (click)="logout()" class="dropdown-item">
               <i class="fa fa-sign-out me-3"></i>
               Logout
             </a>

@@ -1,17 +1,22 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
+import { Store, select } from '@ngrx/store';
 import { map } from 'rxjs';
-import { AccountService } from 'src/app/account/account.service';
+import { currentUser } from 'src/app/account/account.selectors';
+
+import { AppState } from 'src/app/reducers';
 
 export const authGuard: CanActivateFn = (route, state) => {
-  const accountService: AccountService = inject(AccountService);
+  const store: Store<AppState> = inject(Store<AppState>);
   const router: Router = inject(Router);
-
-  return accountService.currentUser$.pipe(
+  return store.pipe(
+    select(currentUser),
     map(auth => {
       if (auth) return true;
       else {
-        router.navigate(['/account/login'], { queryParams: { returnUrl: state.url } });
+        router.navigate(['/account/login'], {
+          queryParams: { returnUrl: state.url },
+        });
         return false;
       }
     }),
