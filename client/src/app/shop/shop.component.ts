@@ -4,6 +4,19 @@ import { ShopService } from './shop.service';
 import { Brand } from '../shared/models/brand';
 import { Type } from '../shared/models/type';
 import { ShopParams } from '../shared/models/shopParams';
+import { AppState } from '../reducers';
+import { Store, select } from '@ngrx/store';
+
+import {
+  selectAllPaginators,
+  selectAllPaginatorsEntities,
+  selectShopParams,
+} from './store/shop.selectors';
+import { EMPTY, Observable, map, of, switchMap, take, tap } from 'rxjs';
+import { Pagination } from '../shared/models';
+import { initialShopState } from './store/shop.reducers';
+import { ShopActions } from './store/action-types';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-shop',
@@ -11,10 +24,21 @@ import { ShopParams } from '../shared/models/shopParams';
   styleUrls: ['./shop.component.scss'],
 })
 export class ShopComponent implements OnInit {
-  products: Product[] = [];
+  shopParams$: Observable<ShopParams> = this.store.pipe(
+    select(selectShopParams),
+    tap(params => console.log(params)),
+  );
+
+  products$ = this.route.data.pipe(
+    map(data => {
+      const products: Product[] | undefined = data['products'];
+      return products ? products : null;
+    }),
+  );
+
   brands: Brand[] = [];
   types: Type[] = [];
-  shopParams: ShopParams;
+
   sortOptions = [
     { name: 'Alphabetical', value: 'name' },
     { name: 'Price: Low to high', value: 'priceAsc' },
@@ -23,26 +47,17 @@ export class ShopComponent implements OnInit {
   totalCount = 0;
   @ViewChild('search') searchTerm?: ElementRef;
 
-  constructor(private _shopService: ShopService) {
-    this.shopParams = _shopService.shopParams;
-  }
+  constructor(
+    private _shopService: ShopService,
+    private store: Store<AppState>,
+    private route: ActivatedRoute,
+  ) {}
 
   ngOnInit(): void {
-    this.getProducts();
     this.getBrands();
     this.getTypes();
   }
 
-  getProducts() {
-    console.log(this.shopParams);
-    this._shopService.getProducts().subscribe({
-      next: response => {
-        this.products = response.data;
-        this.totalCount = response.count;
-      },
-      error: error => console.log(error),
-    });
-  }
   getBrands() {
     this._shopService.getBrands().subscribe({
       next: response => (this.brands = [{ id: 0, name: 'All' }, ...response]),
@@ -56,52 +71,80 @@ export class ShopComponent implements OnInit {
     });
   }
   onBrandSelected(brandId: number) {
-    const params = this._shopService.getShopParams();
-    params.brandId = brandId;
-    params.pageIndex = 1;
-    this._shopService.setShopParams(params);
-    this.shopParams = params;
-    this.getProducts();
+    this.shopParams$.pipe(take(1)).subscribe(shopParams => {
+      const updatedShopParams: ShopParams = {
+        ...shopParams,
+        brandId,
+        pageIndex: 1,
+      };
+      this.store.dispatch(
+        ShopActions.ProductsApiActions.filtersChanged({
+          shopParams: updatedShopParams,
+        }),
+      );
+    });
   }
+
   onTypeSelected(typeId: number) {
-    const params = this._shopService.getShopParams();
-    params.typeId = typeId;
-    params.pageIndex = 1;
-    this._shopService.setShopParams(params);
-    this.shopParams = params;
-    this.getProducts();
+    this.shopParams$.pipe(take(1)).subscribe(shopParams => {
+      const updatedShopParams: ShopParams = {
+        ...shopParams,
+        typeId,
+        pageIndex: 1,
+      };
+      this.store.dispatch(
+        ShopActions.ProductsApiActions.filtersChanged({
+          shopParams: updatedShopParams,
+        }),
+      );
+    });
   }
   onSortSelected(event: any) {
-    const params = this._shopService.getShopParams();
-    params.sort = event.target.value;
-    this._shopService.setShopParams(params);
-    this.shopParams = params;
-    this.getProducts();
+    this.shopParams$.pipe(take(1)).subscribe(shopParams => {
+      const updatedShopParams: ShopParams = {
+        ...shopParams,
+        sort: event.target.value,
+      };
+      this.store.dispatch(
+        ShopActions.ProductsApiActions.filtersChanged({
+          shopParams: updatedShopParams,
+        }),
+      );
+    });
   }
 
   onPageChanged(event: any) {
-    const params = this._shopService.getShopParams();
-    if (params.pageIndex !== event) {
-      params.pageIndex = event;
-      this._shopService.setShopParams(params);
-      this.shopParams = params;
-      this.getProducts();
-    }
+    this.shopParams$.pipe(take(1)).subscribe(shopParams => {
+      const updatedShopParams: ShopParams = { ...shopParams, pageIndex: event };
+      this.store.dispatch(
+        ShopActions.ProductsApiActions.filtersChanged({
+          shopParams: updatedShopParams,
+        }),
+      );
+    });
   }
 
   onSearch() {
-    const params = this._shopService.getShopParams();
-    params.search = this.searchTerm?.nativeElement.value;
-    params.pageIndex = 1;
-    this._shopService.setShopParams(params);
-    this.shopParams = params;
-    this.getProducts();
+    this.shopParams$.pipe(take(1)).subscribe(shopParams => {
+      const updatedShopParams: ShopParams = {
+        ...shopParams,
+        pageIndex: 1,
+        search: this.searchTerm?.nativeElement.value,
+      };
+      this.store.dispatch(
+        ShopActions.ProductsApiActions.filtersChanged({
+          shopParams: updatedShopParams,
+        }),
+      );
+    });
   }
 
   onReset() {
     if (this.searchTerm) this.searchTerm.nativeElement.value = '';
-    const params = new ShopParams();
-    this._shopService.setShopParams(params);
-    this.getProducts();
+    this.store.dispatch(
+      ShopActions.ProductsApiActions.filtersChanged({
+        shopParams: { ...initialShopState.shopParams },
+      }),
+    );
   }
 }

@@ -1,23 +1,56 @@
 <div class="container mt-5">
-  <div class="row" *ngIf="product">
+  <div class="row" *ngIf="product$ | async as product">
     <div class="col-6">
-      <img src="{{ product.pictureUrl }}" alt="{{ product.name }}" class="img-fluid w-100" />
+      <img
+        src="{{ product.pictureUrl }}"
+        alt="{{ product.name }}"
+        class="img-fluid w-100" />
     </div>
-    <div class="col-6 mt-5">
-      <h3>{{ product.name }}</h3>
-      <p style="font-size: 2em">{{ product.price | currency }}</p>
+    <ng-container
+      *ngIf="{
+        quantityInBasket: quantityInBasket$ | async,
+        quantity: quantity$ | async
+      } as productQuantities">
+      <div class="col-6 mt-5">
+        <h3>{{ product.name }}</h3>
+        <p style="font-size: 2em">{{ product.price | currency }}</p>
 
-      <h5 class="text-primary mb-3" *ngIf="quantityInBasket > 0">You have {{ quantityInBasket }} of this item in your basket</h5>
-      <div class="d-flex justify-content-start align-items-center">
-        <i (click)="decrementQuantity()" class="fa fa-minus-circle text-warning me-2" style="cursor: pointer; font-size: 2em"></i>
-        <span class="font-weight-bold" style="font-size: 1.5em">{{ quantity }}</span>
-        <i (click)="incrementQuantity()" class="fa fa-plus-circle text-warning mx-2" style="cursor: pointer; font-size: 2em"></i>
-        <button (click)="updateBasket()" class="btn btn-outline-primary btn-lg ml-4" [disabled]="quantity === quantityInBasket">{{ buttonText }}</button>
+        <h5
+          class="text-primary mb-3"
+          *ngIf="quantityInBasket$ | async as quantityInBasket">
+          You have {{ productQuantities.quantityInBasket }} of this item in your
+          basket
+        </h5>
+        <div class="d-flex justify-content-start align-items-center">
+          <i
+            (click)="decrementQuantity()"
+            class="fa fa-minus-circle text-warning me-2"
+            style="cursor: pointer; font-size: 2em"></i>
+          <span class="font-weight-bold" style="font-size: 1.5em">
+            {{ productQuantities.quantity }}
+          </span>
+          <i
+            (click)="incrementQuantity()"
+            class="fa fa-plus-circle text-warning mx-2"
+            style="cursor: pointer; font-size: 2em"></i>
+          <button
+            (click)="updateBasket(product)"
+            class="btn btn-outline-primary btn-lg ml-4"
+            [disabled]="
+              productQuantities.quantity === productQuantities.quantityInBasket
+            ">
+            {{
+              productQuantities.quantityInBasket === 0
+                ? 'Add to basket'
+                : 'Update basket'
+            }}
+          </button>
+        </div>
+        <div class="row mt-5">
+          <h4>Description</h4>
+          <p>{{ product.description }}</p>
+        </div>
       </div>
-      <div class="row mt-5">
-        <h4>Description</h4>
-        <p>{{ product.description }}</p>
-      </div>
-    </div>
+    </ng-container>
   </div>
 </div>

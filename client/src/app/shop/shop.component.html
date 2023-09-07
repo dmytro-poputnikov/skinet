@@ -1,5 +1,5 @@
 <div class="container">
-  <div class="row" *ngIf="types.length > 0 && brands.length > 0">
+  <div class="row" *ngIf="shopParams$ | async as shopParams">
     <section class="col-3">
       <h5 class="text-warning ms-3">Sort</h5>
       <select
@@ -60,7 +60,7 @@
         </div>
       </div>
       <div class="row row-cols-3 g-3 mb-4">
-        <div class="col" *ngFor="let product of products">
+        <div class="col" *ngFor="let product of products$ | async">
           <app-product-item [product]="product"></app-product-item>
         </div>
       </div>

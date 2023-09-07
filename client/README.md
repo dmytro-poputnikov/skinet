@@ -35,3 +35,4 @@ In chrome web browser add extension: Redux DevTools
 ng generate store auth/Auth --module auth.module.ts
 ng add @ngrx/effects
 ng add @ngrx/router-store
+ng add @ngrx/entity
