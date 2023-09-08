@@ -9,9 +9,8 @@
     "generate-api": "openapi-generator-cli generate  -i http://localhost:5000/swagger/v1/swagger.json -g typescript-angular -o src/app/api",
     "lint": "ng lint",
     "test": "jest --testPathIgnorePatterns='.integration.spec.ts$'",
-    "test:watch": "jest --watch --testPathPattern='.unit.spec.ts$'",
-    "test:coverage": "jest --coverage",
-    "test:unit": "jest --testPathPattern='.unit.spec.ts$'",
+    "test:watch": "jest --watch --testPathIgnorePatterns='.integration.spec.ts$'",
+    "test:coverage": "jest --coverage --testPathIgnorePatterns='.integration.spec.ts$'",
     "test:integration": "jest --testPathPattern='.integration.spec.ts$'",
     "prettier": "npx prettier --write ."
   },
