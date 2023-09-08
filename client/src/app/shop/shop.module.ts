@@ -19,7 +19,7 @@ import { shopEffects } from './store/shop.effects';
     ShopRoutingModule,
     StoreModule.forFeature(
       fromShop.productFeatureKey,
-      fromShop.productsReducer,
+      fromShop.productsReducer
     ),
     EffectsModule.forFeature([shopEffects]),
   ],

@@ -13,7 +13,7 @@ export class OrderDetailedComponent implements OnInit {
   constructor(
     private orderService: OrdersService,
     private route: ActivatedRoute,
-    private bcService: BreadcrumbService,
+    private bcService: BreadcrumbService
   ) {}
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
@@ -21,7 +21,10 @@ export class OrderDetailedComponent implements OnInit {
       this.orderService.getOrderDetailed(+id).subscribe({
         next: order => {
           this.order = order;
-          this.bcService.set('@OrderDetailed', `Order# ${order.id} - ${order.status}`);
+          this.bcService.set(
+            '@OrderDetailed',
+            `Order# ${order.id} - ${order.status}`
+          );
         },
       });
   }

@@ -36,7 +36,7 @@ export class ProductDetailsService {
   }
 
   updateBasket(product: Product) {
-    let quantity = this.quantity.value;
+    const quantity = this.quantity.value;
     let quantityInBasket = this.quantityInBasket.value;
 
     if (product) {

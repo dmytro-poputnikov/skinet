@@ -7,13 +7,8 @@ import { ShopParams } from '../shared/models/shopParams';
 import { AppState } from '../reducers';
 import { Store, select } from '@ngrx/store';
 
-import {
-  selectAllPaginators,
-  selectAllPaginatorsEntities,
-  selectShopParams,
-} from './store/shop.selectors';
-import { EMPTY, Observable, map, of, switchMap, take, tap } from 'rxjs';
-import { Pagination } from '../shared/models';
+import { selectShopParams } from './store/shop.selectors';
+import { Observable, map, take, tap } from 'rxjs';
 import { initialShopState } from './store/shop.reducers';
 import { ShopActions } from './store/action-types';
 import { ActivatedRoute } from '@angular/router';
@@ -26,14 +21,14 @@ import { ActivatedRoute } from '@angular/router';
 export class ShopComponent implements OnInit {
   shopParams$: Observable<ShopParams> = this.store.pipe(
     select(selectShopParams),
-    tap(params => console.log(params)),
+    tap(params => console.log(params))
   );
 
   products$ = this.route.data.pipe(
     map(data => {
       const products: Product[] | undefined = data['products'];
       return products ? products : null;
-    }),
+    })
   );
 
   brands: Brand[] = [];
@@ -50,7 +45,7 @@ export class ShopComponent implements OnInit {
   constructor(
     private _shopService: ShopService,
     private store: Store<AppState>,
-    private route: ActivatedRoute,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -80,7 +75,7 @@ export class ShopComponent implements OnInit {
       this.store.dispatch(
         ShopActions.ProductsApiActions.filtersChanged({
           shopParams: updatedShopParams,
-        }),
+        })
       );
     });
   }
@@ -95,7 +90,7 @@ export class ShopComponent implements OnInit {
       this.store.dispatch(
         ShopActions.ProductsApiActions.filtersChanged({
           shopParams: updatedShopParams,
-        }),
+        })
       );
     });
   }
@@ -108,7 +103,7 @@ export class ShopComponent implements OnInit {
       this.store.dispatch(
         ShopActions.ProductsApiActions.filtersChanged({
           shopParams: updatedShopParams,
-        }),
+        })
       );
     });
   }
@@ -119,7 +114,7 @@ export class ShopComponent implements OnInit {
       this.store.dispatch(
         ShopActions.ProductsApiActions.filtersChanged({
           shopParams: updatedShopParams,
-        }),
+        })
       );
     });
   }
@@ -134,7 +129,7 @@ export class ShopComponent implements OnInit {
       this.store.dispatch(
         ShopActions.ProductsApiActions.filtersChanged({
           shopParams: updatedShopParams,
-        }),
+        })
       );
     });
   }
@@ -144,7 +139,7 @@ export class ShopComponent implements OnInit {
     this.store.dispatch(
       ShopActions.ProductsApiActions.filtersChanged({
         shopParams: { ...initialShopState.shopParams },
-      }),
+      })
     );
   }
 }

@@ -42,7 +42,7 @@ export const productsReducer = createReducer(
     (state, { shopParams }) => ({
       ...state,
       shopParams,
-    }),
+    })
   ),
 
   //Trigger loading the products
@@ -58,7 +58,7 @@ export const productsReducer = createReducer(
       ...state,
       error: null,
       status: Status.SUCCESS,
-    }),
+    })
   ),
   //Handle products load failure
   on(ShopActions.ProductsApiActions.loadDataError, (state, { error }) => ({
@@ -88,7 +88,7 @@ export const productsReducer = createReducer(
     ...state,
     error: error,
     status: Status.ERROR,
-  })),
+  }))
 );
 
 export const { selectEntities, selectIds, selectAll } = adapter.getSelectors();

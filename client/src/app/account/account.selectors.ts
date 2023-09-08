@@ -6,5 +6,5 @@ export const selectAccountState =
 
 export const currentUser = createSelector(
   selectAccountState,
-  account => account.user,
+  account => account.user
 );

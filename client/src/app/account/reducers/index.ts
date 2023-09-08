@@ -24,7 +24,7 @@ export const accountReducer = createReducer(
     return {
       user: null,
     };
-  }),
+  })
 );
 
 // export const reducers: ActionReducerMap<AccountState> = {};

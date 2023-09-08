@@ -18,7 +18,7 @@ export class NavBarComponent {
 
   constructor(
     public basketService: BasketService,
-    private store: Store<AppState>,
+    private store: Store<AppState>
   ) {}
 
   getCount(items: BasketItem[]) {

@@ -13,7 +13,7 @@ import { AccountEffects } from './account.effects';
       fromAccount.accountReducer,
       {
         metaReducers: fromAccount.metaReducers,
-      },
+      }
     ),
     EffectsModule.forFeature([AccountEffects]),
   ],

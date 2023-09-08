@@ -22,9 +22,21 @@ Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.
 
 Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
 
-## Further help
+## JEST
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+https://jnpiyush.medium.com/how-to-set-up-jest-in-angular-app-961ddcbab8af
+
+npm install jest jest-preset-angular @types/jest @angular-builders/jest --save-dev
+
+## ESLINT
+
+https://blog.bitsrc.io/how-ive-set-up-eslint-and-prettier-in-angular-16-and-why-i-did-that-4bfc304284a6
+
+https://www.amadousall.com/how-to-set-up-angular-unit-testing-with-jest/
+
+npm i -D @testing-library/angular @testing-library/user-event @testing-library/jest-dom
+npm i -D jest @types/jest jest-preset-angular
+npm i -D msw whatwg-fetch
 
 ## Add ngrx:
 

@@ -1,26 +1,12 @@
 {
-  "printWidth": 80,
-  "singleQuote": true,
-  "useTabs": false,
-  "bracketSameLine": true,
   "tabWidth": 2,
-  "htmlWhitespaceSensitivity": "ignore",
+  "useTabs": false,
+  "singleQuote": true,
   "semi": true,
   "bracketSpacing": true,
   "arrowParens": "avoid",
-  "trailingComma": "all",
-  "overrides": [
-    {
-      "files": "*.html",
-      "options": {
-        "printWidth": 80
-      }
-    },
-    {
-      "files": "src/app/api/**/*.ts",
-      "options": {
-        "printWidth": 3000
-      }
-    }
-  ]
+  "trailingComma": "es5",
+  "bracketSameLine": true,
+  "printWidth": 80,
+  "endOfLine": "auto"
 }

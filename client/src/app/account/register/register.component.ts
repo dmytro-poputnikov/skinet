@@ -1,5 +1,10 @@
 import { Component } from '@angular/core';
-import { AbstractControl, AsyncValidatorFn, FormBuilder, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  AsyncValidatorFn,
+  FormBuilder,
+  Validators,
+} from '@angular/forms';
 import { AccountService } from '../account.service';
 import { Router } from '@angular/router';
 import { debounceTime, finalize, map, switchMap, take } from 'rxjs';
@@ -12,15 +17,26 @@ import { debounceTime, finalize, map, switchMap, take } from 'rxjs';
 export class RegisterComponent {
   errors: string[] | null = null;
 
-  constructor(private fb: FormBuilder, private accountService: AccountService, private router: Router) {}
+  constructor(
+    private fb: FormBuilder,
+    private accountService: AccountService,
+    private router: Router
+  ) {}
 
   complexPassword =
     "(?=^.{6,10}$)(?=.*d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&amp;*()_+}{&quot;:;'?/&gt;.&lt;,])(?!.*s).*$";
 
   registerForm = this.fb.group({
     displayName: ['', Validators.required],
-    email: ['', [Validators.required, Validators.email], [this.validateEmailNotTaken()]],
-    password: ['', [Validators.required, Validators.pattern(this.complexPassword)]], //https://regexlib.com/ - password
+    email: [
+      '',
+      [Validators.required, Validators.email],
+      [this.validateEmailNotTaken()],
+    ],
+    password: [
+      '',
+      [Validators.required, Validators.pattern(this.complexPassword)],
+    ], //https://regexlib.com/ - password
   });
 
   onSubmit() {
@@ -38,9 +54,9 @@ export class RegisterComponent {
         switchMap(() => {
           return this.accountService.checkEmailExists(control.value).pipe(
             map(result => (result ? { emailExists: true } : null)),
-            finalize(() => control.markAsTouched()),
+            finalize(() => control.markAsTouched())
           );
-        }),
+        })
       );
     };
   }

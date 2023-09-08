@@ -26,7 +26,7 @@ import { ShopActions } from './store/action-types';
 
 export const ProductsResolver: ResolveFn<any> = (
   route: ActivatedRouteSnapshot,
-  state: RouterStateSnapshot,
+  state: RouterStateSnapshot
 ): Observable<Product[] | null> => {
   const store = inject(Store<AppState>);
   let isLoading = false;
@@ -50,6 +50,6 @@ export const ProductsResolver: ResolveFn<any> = (
     catchError(() => {
       return of(null);
     }),
-    finalize(() => (isLoading = false)),
+    finalize(() => (isLoading = false))
   );
 };

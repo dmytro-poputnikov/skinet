@@ -16,13 +16,13 @@ import { AccountActions } from './action-types';
 export class AccountService {
   readonly baseUrl = environment.apiUrl;
   readonly currentUser$: Observable<User | null> = this.store.pipe(
-    select(currentUser),
+    select(currentUser)
   );
 
   constructor(
     private http: HttpClient,
     private router: Router,
-    private store: Store<AccountState>,
+    private store: Store<AccountState>
   ) {}
 
   loadCurrentUser(token: string | null) {
@@ -40,7 +40,7 @@ export class AccountService {
         } else {
           return null;
         }
-      }),
+      })
     );
   }
 
@@ -58,7 +58,7 @@ export class AccountService {
 
   checkEmailExists(email: string) {
     return this.http.get<boolean>(
-      this.baseUrl + 'account/emailExists?email=' + email,
+      this.baseUrl + 'account/emailExists?email=' + email
     );
   }
 

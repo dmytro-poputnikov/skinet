@@ -14,9 +14,7 @@ import { ProductDetailsService } from './product-details.service';
 export class ProductDetailsComponent {
   product$ = this.route.data.pipe(
     map(data => data['product']),
-    tap(product =>
-      this.breadcrumbService.set('@productDetails', product?.name),
-    ),
+    tap(product => this.breadcrumbService.set('@productDetails', product?.name))
   );
 
   quantity$ = this.productDetailsService.getQuantity();
@@ -25,7 +23,7 @@ export class ProductDetailsComponent {
   constructor(
     private route: ActivatedRoute,
     private breadcrumbService: BreadcrumbService,
-    private productDetailsService: ProductDetailsService,
+    private productDetailsService: ProductDetailsService
   ) {
     this.breadcrumbService.set('@productDetails', ' ');
   }

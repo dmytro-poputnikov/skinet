@@ -1,5 +1,3 @@
-import { ProductsService } from './api';
-import { BuggyService } from './api/api/buggy.service';
 import { Component, OnInit } from '@angular/core';
 import { BasketService } from './basket/basket.service';
 import { AccountService } from './account/account.service';
@@ -12,7 +10,10 @@ import { AccountService } from './account/account.service';
 export class AppComponent implements OnInit {
   title = 'Skinet';
 
-  constructor(private basketService: BasketService, private accountService: AccountService) {}
+  constructor(
+    private basketService: BasketService,
+    private accountService: AccountService
+  ) {}
 
   ngOnInit(): void {
     this.loadBasket();

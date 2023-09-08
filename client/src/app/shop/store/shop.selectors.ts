@@ -11,17 +11,17 @@ export const selectProductsState =
 
 export const selectAllPaginatorsEntities = createSelector(
   selectProductsState,
-  fromShop.selectEntities,
+  fromShop.selectEntities
 );
 
 export const selectAllPaginators = createSelector(
   selectProductsState,
-  fromShop.selectAll,
+  fromShop.selectAll
 );
 
 export const selectShopParams = createSelector(
   selectProductsState,
-  state => state.shopParams,
+  state => state.shopParams
 );
 
 export const selectProductById = (productId: number) =>

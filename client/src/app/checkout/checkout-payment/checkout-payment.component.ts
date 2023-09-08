@@ -40,12 +40,12 @@ export class CheckoutPaymentComponent implements OnInit {
     private basketService: BasketService,
     private checkoutService: CheckoutService,
     private toastr: ToastrService,
-    private router: Router,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
     loadStripe(
-      'pk_test_51Nl5BzL78u407snAivJ2tjxzYKGyP7xf4cAVdaLOWMVa35ifvEqvKlCzBAOHRpy4bOrpNKULCUI3kJYfgc1tEdoV00SGba3iZM',
+      'pk_test_51Nl5BzL78u407snAivJ2tjxzYKGyP7xf4cAVdaLOWMVa35ifvEqvKlCzBAOHRpy4bOrpNKULCUI3kJYfgc1tEdoV00SGba3iZM'
     ).then(stripe => {
       this.stripe = stripe;
       const elements = stripe?.elements();
@@ -128,9 +128,13 @@ export class CheckoutPaymentComponent implements OnInit {
     return firstValueFrom(this.checkoutService.createOrder(orderToCreate));
   }
   private getOrderToCreate(basket: Basket): OrderToCreate {
-    const deliveryMethodId = this.checkoutForm?.get('deliveryForm')?.get('deliveryMethod')?.value;
-    const shipToAddress = this.checkoutForm?.get('addressForm')?.value as Address;
-    if (!deliveryMethodId || !shipToAddress) throw new Error('Problem with basket');
+    const deliveryMethodId = this.checkoutForm
+      ?.get('deliveryForm')
+      ?.get('deliveryMethod')?.value;
+    const shipToAddress = this.checkoutForm?.get('addressForm')
+      ?.value as Address;
+    if (!deliveryMethodId || !shipToAddress)
+      throw new Error('Problem with basket');
     return {
       basketId: basket.id,
       deliveryMethodId: deliveryMethodId,

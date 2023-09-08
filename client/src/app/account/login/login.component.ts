@@ -13,7 +13,7 @@ export class LoginComponent {
   constructor(
     private accountService: AccountService,
     private router: Router,
-    private activatedRoute: ActivatedRoute,
+    private activatedRoute: ActivatedRoute
   ) {
     this.returnUrl =
       this.activatedRoute.snapshot.queryParams['returnUrl'] || '/shop';

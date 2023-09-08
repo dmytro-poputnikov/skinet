@@ -11,7 +11,10 @@ import { BasketService } from 'src/app/basket/basket.service';
 export class CheckoutReviewComponent {
   @Input() appStepper?: CdkStepper;
 
-  constructor(private basketService: BasketService, private toastr: ToastrService) {}
+  constructor(
+    private basketService: BasketService,
+    private toastr: ToastrService
+  ) {}
 
   createPaymentIntent() {
     this.basketService.createPaymentIntent().subscribe({

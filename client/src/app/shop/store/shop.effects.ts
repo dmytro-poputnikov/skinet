@@ -13,12 +13,12 @@ export class shopEffects {
       ofType(ShopActions.ProductsApiActions.loadData),
       concatMap(action => this.shopService.getProducts(action.shopParams)),
       map(paginator =>
-        ShopActions.ProductsApiActions.loadDataSuccess({ paginator }),
+        ShopActions.ProductsApiActions.loadDataSuccess({ paginator })
       ),
       catchError(error =>
-        of(ShopActions.ProductsApiActions.loadDataError({ error })),
-      ),
-    ),
+        of(ShopActions.ProductsApiActions.loadDataError({ error }))
+      )
+    )
   );
 
   filtersChanged$ = createEffect(
@@ -40,9 +40,9 @@ export class shopEffects {
           }
           return queryParams;
         }),
-        tap(queryParams => this.router.navigate(['/shop'], { queryParams })),
+        tap(queryParams => this.router.navigate(['/shop'], { queryParams }))
       ),
-    { dispatch: false },
+    { dispatch: false }
   );
 
   loadProduct$ = createEffect(() =>
@@ -50,17 +50,17 @@ export class shopEffects {
       ofType(ShopActions.ProductApiActions.loadData),
       concatMap(action => this.shopService.getProduct(action.id)),
       map(product =>
-        ShopActions.ProductApiActions.loadDataSuccess({ product }),
+        ShopActions.ProductApiActions.loadDataSuccess({ product })
       ),
       catchError(error =>
-        of(ShopActions.ProductApiActions.loadDataError({ error })),
-      ),
-    ),
+        of(ShopActions.ProductApiActions.loadDataError({ error }))
+      )
+    )
   );
 
   constructor(
     private actions$: Actions,
     private shopService: ShopService,
-    private router: Router,
+    private router: Router
   ) {}
 }

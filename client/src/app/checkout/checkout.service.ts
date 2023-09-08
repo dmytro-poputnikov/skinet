@@ -17,10 +17,12 @@ export class CheckoutService {
   }
 
   getDeliveryMethods() {
-    return this.http.get<DeliveryMethod[]>(this.baseUrl + 'orders/deliveryMethods').pipe(
-      map(dm => {
-        return dm.sort((a, b) => b.price - a.price);
-      }),
-    );
+    return this.http
+      .get<DeliveryMethod[]>(this.baseUrl + 'orders/deliveryMethods')
+      .pipe(
+        map(dm => {
+          return dm.sort((a, b) => b.price - a.price);
+        })
+      );
   }
 }

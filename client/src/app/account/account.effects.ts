@@ -11,9 +11,9 @@ export class AccountEffects {
     () =>
       this.actions$.pipe(
         ofType(AccountActions.login),
-        tap(action => localStorage.setItem('token', action.user.token)),
+        tap(action => localStorage.setItem('token', action.user.token))
       ),
-    { dispatch: false },
+    { dispatch: false }
   );
 
   logout$ = createEffect(
@@ -23,10 +23,13 @@ export class AccountEffects {
         tap(action => {
           localStorage.removeItem('token');
           this.router.navigateByUrl('/');
-        }),
+        })
       ),
-    { dispatch: false },
+    { dispatch: false }
   );
 
-  constructor(private actions$: Actions, private router: Router) {}
+  constructor(
+    private actions$: Actions,
+    private router: Router
+  ) {}
 }

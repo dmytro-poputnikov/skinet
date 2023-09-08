@@ -9,7 +9,11 @@ import { BasketService } from '../basket/basket.service';
   styleUrls: ['./checkout.component.scss'],
 })
 export class CheckoutComponent implements OnInit {
-  constructor(private fb: FormBuilder, private accountService: AccountService, private basketService: BasketService) {}
+  constructor(
+    private fb: FormBuilder,
+    private accountService: AccountService,
+    private basketService: BasketService
+  ) {}
 
   ngOnInit(): void {
     this.getAddressFormValues();
@@ -44,7 +48,10 @@ export class CheckoutComponent implements OnInit {
   getDeliveryMethodValue() {
     const basket = this.basketService.getCurrentBasketValue();
     if (basket && basket.deliveryMethodId) {
-      this.checkoutForm.get('deliveryForm')?.get('deliveryMethod')?.patchValue(basket.deliveryMethodId.toString());
+      this.checkoutForm
+        .get('deliveryForm')
+        ?.get('deliveryMethod')
+        ?.patchValue(basket.deliveryMethodId.toString());
     }
   }
 }

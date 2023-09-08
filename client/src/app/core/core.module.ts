@@ -12,7 +12,13 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
-  declarations: [NavBarComponent, TestErrorComponent, NotFoundComponent, ServerErrorComponent, SectionHeaderComponent],
+  declarations: [
+    NavBarComponent,
+    TestErrorComponent,
+    NotFoundComponent,
+    ServerErrorComponent,
+    SectionHeaderComponent,
+  ],
   imports: [
     CommonModule,
     RouterModule,

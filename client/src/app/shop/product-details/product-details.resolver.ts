@@ -16,18 +16,14 @@ import {
 import { AppState } from 'src/app/reducers';
 import { Store, select } from '@ngrx/store';
 import { ShopActions } from '../store/action-types';
-import {
-  selectAllPaginators,
-  selectProductById,
-} from '../store/shop.selectors';
+import { selectProductById } from '../store/shop.selectors';
 import { Product } from 'src/app/shared/models';
 import { BasketService } from 'src/app/basket/basket.service';
 import { ProductDetailsService } from './product-details.service';
 import { BreadcrumbService } from 'xng-breadcrumb';
 
 export const ProductResolver: ResolveFn<any> = (
-  route: ActivatedRouteSnapshot,
-  state: RouterStateSnapshot,
+  route: ActivatedRouteSnapshot
 ): Observable<Product | null> => {
   const store = inject(Store<AppState>);
   const basketService = inject(BasketService);
@@ -60,8 +56,8 @@ export const ProductResolver: ResolveFn<any> = (
           isLoading = false;
           return of(null);
         }),
-        finalize(() => (isLoading = false)),
+        finalize(() => (isLoading = false))
       );
-    }),
+    })
   );
 };

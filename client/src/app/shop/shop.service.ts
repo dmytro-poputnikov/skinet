@@ -22,7 +22,10 @@ export class ShopService {
   types: Type[] = [];
   pagination?: Pagination<Product[]>;
 
-  constructor(private http: HttpClient, private store: Store<AppState>) {}
+  constructor(
+    private http: HttpClient,
+    private store: Store<AppState>
+  ) {}
 
   getProducts(shopParams: ShopParams): Observable<Pagination<Product[]>> {
     let params = new HttpParams();
@@ -43,7 +46,7 @@ export class ShopService {
         map(response => {
           this.pagination = response;
           return { ...response, id: Object.values(shopParams).join('-') };
-        }),
+        })
       );
   }
 
@@ -53,7 +56,7 @@ export class ShopService {
 
   setShopParams(params: ShopParams) {
     this.store.dispatch(
-      ShopActions.ProductsApiActions.filtersChanged({ shopParams: params }),
+      ShopActions.ProductsApiActions.filtersChanged({ shopParams: params })
     );
   }
 
