@@ -24,6 +24,9 @@ export class ErrorInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(
       catchError((error: HttpErrorResponse) => {
         if (error) {
+          if (error.status === 0) {
+            this.toastr.error('Service Unavailable', '503');
+          }
           if (error.status === 400) {
             if (error.error.errors) {
               throw error.error;

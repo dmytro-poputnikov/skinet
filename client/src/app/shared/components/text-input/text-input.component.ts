@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import { Component, Input, Self } from '@angular/core';
 import { ControlValueAccessor, FormControl, NgControl } from '@angular/forms';
 
@@ -7,6 +8,7 @@ import { ControlValueAccessor, FormControl, NgControl } from '@angular/forms';
   styleUrls: ['./text-input.component.scss'],
 })
 export class TextInputComponent implements ControlValueAccessor {
+  @Input() id = '';
   @Input() type = 'text';
   @Input() label = '';
 

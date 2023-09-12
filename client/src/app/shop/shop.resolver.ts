@@ -27,7 +27,7 @@ import { ShopActions } from './store/action-types';
 export const ProductsResolver: ResolveFn<any> = (
   route: ActivatedRouteSnapshot,
   state: RouterStateSnapshot
-): Observable<Product[] | null> => {
+): Observable<{ products: Product[]; total: number } | null> => {
   const store = inject(Store<AppState>);
   let isLoading = false;
   const shopParams = mapShopParams(route);
@@ -44,7 +44,7 @@ export const ProductsResolver: ResolveFn<any> = (
     }),
     filter(entity => !!entity),
     map(entity => {
-      return entity!.data;
+      return { products: entity!.data, total: entity!.count };
     }),
     first(),
     catchError(() => {

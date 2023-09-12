@@ -1,5 +1,6 @@
 <div class="form-floating mb-3">
   <input
+    [id]="id"
     type="{{ type }}"
     [formControl]="control"
     placeholder="{{ label }}"
@@ -10,7 +11,7 @@
   <div
     *ngIf="control.status === 'PENDING'"
     class="fa fa-spinner fa-spin loader"></div>
-  <label for="floatingInput">{{ label }}</label>
+  <label [for]="id">{{ label }}</label>
   <div *ngIf="control.errors?.['required']" class="invalid-feedback">
     Please enter your {{ label }}
   </div>

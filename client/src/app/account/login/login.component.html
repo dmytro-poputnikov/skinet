@@ -1,23 +1,34 @@
-<div class="d-flex justify-content-center mt-5">
+<div
+  class="d-flex justify-content-center mt-5"
+  data-testid="login-component-container">
   <div class="col-3">
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <form
+      [formGroup]="loginForm"
+      (ngSubmit)="onSubmit()"
+      data-testid="login-form">
       <div class="text-center mb-4">
         <h1 class="mb-3">Login</h1>
       </div>
 
       <app-text-input
+        [id]="'email'"
+        [type]="'email'"
         [formControl]="loginForm.controls['email']"
-        [label]="'Email Address'"></app-text-input>
+        [label]="'Email Address'"
+        data-testid="email-input"></app-text-input>
       <app-text-input
+        [id]="'password'"
         [formControl]="loginForm.controls['password']"
         [type]="'password'"
-        [label]="'Password'"></app-text-input>
+        [label]="'Password'"
+        data-testid="password-input"></app-text-input>
 
       <div class="d-grid">
         <button
           [disabled]="loginForm.invalid"
           class="btn btn-lg btn-primary mt-3"
-          type="submit">
+          type="submit"
+          data-testid="submit-button">
           Sign In
         </button>
       </div>

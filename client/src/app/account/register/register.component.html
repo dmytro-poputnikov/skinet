@@ -1,4 +1,6 @@
-<div class="d-flex justify-content-center mt-5">
+<div
+  class="d-flex justify-content-center mt-5"
+  data-testid="register-form-container">
   <div class="col-3">
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
       <div class="text-center mb-4">
@@ -6,28 +8,54 @@
       </div>
 
       <app-text-input
+        [id]="'displayName'"
         [formControl]="registerForm.controls['displayName']"
         [label]="'Display Name'"></app-text-input>
       <app-text-input
+        [id]="'email'"
+        [type]="'email'"
         [formControl]="registerForm.controls['email']"
         [label]="'Email Address'"></app-text-input>
       <app-text-input
+        [id]="'password'"
         [formControl]="registerForm.controls['password']"
         [type]="'password'"
         [label]="'Password'"></app-text-input>
+      <app-text-input
+        [id]="'repeatPassword'"
+        [formControl]="registerForm.controls['repeatPassword']"
+        [type]="'password'"
+        [label]="'Repeat Password'"></app-text-input>
 
       <ul class="text-danger list-unstyled" *ngIf="errors">
         <li *ngFor="let error of errors">
           {{ error }}
         </li>
       </ul>
+      <div
+        *ngIf="
+          registerForm.hasError('passwordMismatch') &&
+          registerForm.get('password')?.touched &&
+          registerForm.get('repeatPassword')?.touched &&
+          !registerForm.get('password')?.hasError('required') &&
+          !registerForm.get('password')?.hasError('pattern')
+        "
+        class="text-danger list-unstyled"
+        data-testid="passwordMismatchError">
+        Passwords do not match
+      </div>
 
       <div class="d-grid">
         <button
-          [disabled]="registerForm.invalid"
+          [disabled]="registerForm.invalid || reqInProgress"
           class="btn btn-lg btn-primary mt-3"
           type="submit">
           Sign up
+          <i
+            *ngIf="reqInProgress"
+            role="status"
+            class="fa fa-spinner fa-spin"
+            style="margin-left: 10px"></i>
         </button>
       </div>
     </form>

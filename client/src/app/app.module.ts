@@ -46,6 +46,7 @@ import { RouterState, StoreRouterConnectingModule } from '@ngrx/router-store';
       stateKey: 'router',
       routerState: RouterState.Minimal,
     }),
+    StoreModule.forRoot({}, {}),
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },

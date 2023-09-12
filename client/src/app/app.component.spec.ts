@@ -1,61 +1,110 @@
-import { TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
-import { NgxSpinnerModule } from 'ngx-spinner';
-import { SectionHeaderComponent } from './core/section-header/section-header.component';
-import { NavBarComponent } from './core/nav-bar/nav-bar.component';
-import { RouterModule } from '@angular/router';
-import { BreadcrumbModule } from 'xng-breadcrumb';
-import { StoreModule } from '@ngrx/store';
-import { HttpClientModule } from '@angular/common/http';
-import { MockStore, provideMockStore } from '@ngrx/store/testing';
-import { BasketService } from './basket/basket.service';
 import { AccountService } from './account/account.service';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { BasketService } from './basket/basket.service';
+import { RouterTestingModule } from '@angular/router/testing';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { NavBarComponent } from './core/nav-bar/nav-bar.component';
+import { SectionHeaderComponent } from './core/section-header/section-header.component';
+import { MockStore, provideMockStore } from '@ngrx/store/testing';
+import 'src/app/tests/localStorageMock';
+import { of } from 'rxjs';
+import { BreadcrumbService } from 'xng-breadcrumb';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('AppComponent', () => {
-  let store: MockStore;
+  let component: AppComponent;
+  let accountServiceMock: any;
+  let basketServiceMock: any;
+  let breadCrumbServiceMock: any;
+  let store: MockStore<{ loggedIn: boolean }>;
+  let getItemSpy: jest.SpyInstance;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule,
-        NgxSpinnerModule,
-        RouterModule,
-        HttpClientModule,
-        StoreModule,
-        BreadcrumbModule,
-      ],
-      declarations: [AppComponent, SectionHeaderComponent, NavBarComponent],
+  let fixture: ComponentFixture<AppComponent>;
+
+  beforeEach(async () => {
+    accountServiceMock = {
+      loadCurrentUser: jest.fn(),
+    };
+
+    basketServiceMock = {
+      getBasket: jest.fn(),
+    };
+
+    breadCrumbServiceMock = {};
+
+    await TestBed.configureTestingModule({
+      declarations: [AppComponent, NavBarComponent, SectionHeaderComponent],
       providers: [
+        {
+          provide: AccountService,
+          useValue: accountServiceMock,
+        },
+        {
+          provide: BasketService,
+          useValue: basketServiceMock,
+        },
+        {
+          provide: BreadcrumbService,
+          useValue: breadCrumbServiceMock,
+        },
         provideMockStore({
-          initialState: { books: { entities: [] } },
+          initialState: {},
         }),
-        BasketService,
-        AccountService,
       ],
-    });
+      imports: [RouterTestingModule, NgxSpinnerModule],
+    }).compileComponents();
 
     store = TestBed.inject(MockStore);
   });
 
-  it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app).toBeTruthy();
+  beforeEach(() => {
+    localStorage.clear();
+    fixture = TestBed.createComponent(AppComponent);
+    component = fixture.componentInstance;
+    getItemSpy = jest.spyOn(localStorage, 'getItem');
   });
 
-  it(`should have as title 'Skinet'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('Skinet');
+  it('should create the app', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('should load basket if basket_id is available in localStorage', () => {
+    const basketId = 'testBasketId';
+    localStorage.setItem('basket_id', basketId);
+    fixture.detectChanges();
+    expect(getItemSpy).toHaveBeenCalledWith('basket_id');
+    expect(basketServiceMock.getBasket).toHaveBeenCalledWith(basketId);
+  });
+
+  it('should not load basket if basket_id is not available in localStorage', () => {
+    fixture.detectChanges();
+    expect(getItemSpy).toHaveBeenCalledWith('basket_id');
+    expect(basketServiceMock.getBasket).not.toHaveBeenCalledWith('test');
+  });
+
+  it('should load current user when token is available in localStorage', () => {
+    jest.spyOn(accountServiceMock, 'loadCurrentUser').mockReturnValue(of(null));
+    const token = 'testToken';
+    localStorage.setItem('token', token);
+    fixture.detectChanges();
+    expect(localStorage.getItem).toHaveBeenCalledWith('token');
+    expect(accountServiceMock.loadCurrentUser).toHaveBeenCalledWith(token);
+  });
+
+  it('should load current user when token is available in localStorage', () => {
+    jest.spyOn(accountServiceMock, 'loadCurrentUser').mockReturnValue(of(null));
+    const token = 'testToken';
+    localStorage.setItem('token', token);
+    fixture.detectChanges();
+    expect(localStorage.getItem).toHaveBeenCalledWith('token');
+    expect(accountServiceMock.loadCurrentUser).toHaveBeenCalledWith(token);
+  });
+
+  it('should not load current user when token is not available in localStorage', () => {
+    jest.spyOn(accountServiceMock, 'loadCurrentUser').mockReturnValue(of(null));
+    fixture.detectChanges();
+    expect(localStorage.getItem).toHaveBeenCalledWith('token');
+    expect(accountServiceMock.loadCurrentUser).not.toHaveBeenCalled();
   });
 });
-
-// it('should render title', () => {
-//   const fixture = TestBed.createComponent(AppComponent);
-//   fixture.detectChanges();
-//   const compiled = fixture.nativeElement as HTMLElement;
-//   expect(compiled.querySelector('.content span')?.textContent).toContain(
-//     'client app is running!'
-//   );
-// });

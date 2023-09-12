@@ -19,6 +19,7 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./shop.component.scss'],
 })
 export class ShopComponent implements OnInit {
+  totalCount = 0;
   shopParams$: Observable<ShopParams> = this.store.pipe(
     select(selectShopParams),
     tap(params => console.log(params))
@@ -26,7 +27,10 @@ export class ShopComponent implements OnInit {
 
   products$ = this.route.data.pipe(
     map(data => {
-      const products: Product[] | undefined = data['products'];
+      const products: Product[] | undefined = data['products']['products'];
+      this.totalCount = data['products']['total']
+        ? data['products']['total']
+        : 0;
       return products ? products : null;
     })
   );
@@ -39,7 +43,7 @@ export class ShopComponent implements OnInit {
     { name: 'Price: Low to high', value: 'priceAsc' },
     { name: 'Price: High to low', value: 'priceDesc' },
   ];
-  totalCount = 0;
+
   @ViewChild('search') searchTerm?: ElementRef;
 
   constructor(
