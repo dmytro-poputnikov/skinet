@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable, map, of, tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Address, User } from '../shared/models/user';
+import { Address, LoginDto, RegisterDto, User } from '../shared/models/user';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Router } from '@angular/router';
-import { Store, select } from '@ngrx/store';
-
+import { Store } from '@ngrx/store';
 import { AccountState } from './reducers';
 import { currentUser } from './account.selectors';
 import { AccountActions } from './action-types';
@@ -15,21 +13,31 @@ import { AccountActions } from './action-types';
 })
 export class AccountService {
   readonly baseUrl = environment.apiUrl;
-  readonly currentUser$: Observable<User | null> = this.store.pipe(
-    select(currentUser)
-  );
+  readonly currentUser$: Observable<User | null> =
+    this.store.select(currentUser);
 
   constructor(
     private http: HttpClient,
-    private router: Router,
     private store: Store<AccountState>
   ) {}
 
-  loadCurrentUser(token: string | null) {
-    if (token === null) {
-      return of(null);
-    }
+  /**
+   * Register the new user.
+   * @param payload - The register DTO to process.
+   * @returns An `Observable` that emits the `User` object.
+   */
+  register(payload: RegisterDto) {
+    return this.http
+      .post<User>(this.baseUrl + 'account/register', payload)
+      .pipe(tap(user => this.store.dispatch(AccountActions.login({ user }))));
+  }
 
+  /**
+   * Loads the current user based on the provided authentication token.
+   * @param token - The authentication token to process.
+   * @returns An `Observable` that emits the `User` object or `null` if no user is found.
+   */
+  loadCurrentUser(token: string) {
     let headers = new HttpHeaders();
     headers = headers.set('Authorization', `Bearer ${token}`);
     return this.http.get<User>(this.baseUrl + 'account', { headers }).pipe(
@@ -44,13 +52,7 @@ export class AccountService {
     );
   }
 
-  register(values: any) {
-    return this.http
-      .post<User>(this.baseUrl + 'account/register', values)
-      .pipe(tap(user => this.store.dispatch(AccountActions.login({ user }))));
-  }
-
-  login(values: any) {
+  login(values: LoginDto) {
     return this.http
       .post<User>(this.baseUrl + 'account/login', values)
       .pipe(tap(user => this.store.dispatch(AccountActions.login({ user }))));

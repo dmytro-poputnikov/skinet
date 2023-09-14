@@ -101,7 +101,7 @@ describe('Register Component', () => {
       ).toBeInTheDocument();
     });
 
-    it('disables the Sign Up button initially', () => {
+    it('disable the Sign Up button initially', () => {
       const button = screen.getByRole('button', { name: 'Sign up' });
       expect(button).toBeDisabled();
     });
@@ -136,7 +136,7 @@ describe('Register Component', () => {
       button = screen.getByRole('button', { name: 'Sign up' });
     };
 
-    it(' navigate to "/shop" route after successfull registration', async () => {
+    it('navigate to "/shop" route after successfull registration', async () => {
       jest
         .spyOn(accountServiceMock, 'checkEmailExists')
         .mockReturnValue(of(false));
@@ -154,12 +154,12 @@ describe('Register Component', () => {
       expect(spyNavigateByUrl).toHaveBeenCalledWith('/shop');
     });
 
-    it(' enable the button when all fields have valid input', async () => {
+    it('enable the button when all fields have valid input', async () => {
       await setupForm();
       expect(button).toBeEnabled();
     });
 
-    it(' disable button when there is an outgoing api call', async () => {
+    it('disable button when there is an outgoing api call', async () => {
       jest
         .spyOn(accountServiceMock, 'checkEmailExists')
         .mockReturnValue(of(false));
@@ -171,7 +171,7 @@ describe('Register Component', () => {
       expect(accountServiceMock.register).toHaveBeenCalledTimes(1);
     });
 
-    it('displays validation error coming from backend after submit failure', async () => {
+    it('display validation error coming from backend after submit failure', async () => {
       const validationError = { errors: ['Validation error message'] };
       jest
         .spyOn(accountServiceMock, 'register')
@@ -184,7 +184,7 @@ describe('Register Component', () => {
       ).toBeInTheDocument();
     });
 
-    it('displays spinner after clicking the submit', async () => {
+    it('display spinner after clicking the submit', async () => {
       jest
         .spyOn(accountServiceMock, 'checkEmailExists')
         .mockReturnValue(of(false));
@@ -196,7 +196,7 @@ describe('Register Component', () => {
       expect(screen.queryByRole('status')).toBeInTheDocument();
     });
 
-    it('hides spinner after sign up request fails', async () => {
+    it('hide spinner after sign up request fails', async () => {
       const validationError = { errors: ['Validation error message'] };
       jest
         .spyOn(accountServiceMock, 'register')
@@ -245,6 +245,7 @@ describe('Register Component', () => {
       ${'Email Address'}   | ${'wrong-email'}          | ${'Invalid email address'}
       ${'Email Address'}   | ${'emailTaken@gmail.com'} | ${'Email address is taken'}
       ${'Password'}        | ${'paSS1234'}             | ${'Password not complex enough'}
+      ${'Password'}        | ${'paSSwor'}              | ${'Password not complex enough'}
       ${'Repeat Password'} | ${'P@$$w0rd123'}          | ${'Passwords do not match'}
     `(
       'display $message when $label has the value $inputValue',

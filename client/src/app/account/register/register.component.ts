@@ -59,7 +59,6 @@ export class RegisterComponent {
   matchPassword(control: AbstractControl): ValidationErrors | null {
     const password = control.get('password')?.value;
     const confirm = control.get('repeatPassword')?.value;
-    // console.log(confirm);
 
     if (
       password != confirm &&
@@ -78,10 +77,8 @@ export class RegisterComponent {
   onSubmit() {
     this.reqInProgress = true;
     const { displayName, email, password } = this.registerForm.value;
-    this.accountService
-      .register({ displayName, email, password })
-      // .pipe(finalize(() => (this.reqInProgress = false)))
-      .subscribe({
+    if (displayName && email && password)
+      this.accountService.register({ displayName, email, password }).subscribe({
         next: () => this.router.navigateByUrl('/shop'),
         error: error => {
           this.reqInProgress = false;

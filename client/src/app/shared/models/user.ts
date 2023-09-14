@@ -4,6 +4,17 @@ export interface User {
   token: string;
 }
 
+export interface LoginDto {
+  email: string;
+  password: string;
+}
+
+export interface RegisterDto {
+  displayName: string;
+  email: string;
+  password: string;
+}
+
 export interface Address {
   firstName: string;
   lastName: string;

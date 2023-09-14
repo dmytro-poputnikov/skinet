@@ -51,3 +51,7 @@ ng generate store auth/Auth --module auth.module.ts
 ng add @ngrx/effects
 ng add @ngrx/router-store
 ng add @ngrx/entity
+
+## DOCUMENTATION
+
+https://dev.to/this-is-angular/documenting-angular-projects-5ob
